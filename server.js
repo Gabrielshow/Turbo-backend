@@ -1,7 +1,7 @@
 // server.js
 const express = require("express");
 const nodemailer = require("nodemailer");
-const Imap = require("node-imap");
+// const Imap = require("node-imap");
 const cors = require("cors");
 
 const app = express();

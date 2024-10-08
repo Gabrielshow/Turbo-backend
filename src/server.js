@@ -1,73 +1,84 @@
 // server.js
 const express = require("express");
 const nodemailer = require("nodemailer");
-const Imap = require("node-imap");
+// const Imap = require("node-imap");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 
-// IMAP email server settings
-const imap = new Imap({
-  user: "myacreatives82@gmail.com",
-  password: "vmdlsafsrsbrkmnp",
-  host: "imap.gmail.com",
-  port: 993,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  tlsOptions: {
-    rejectUnauthorized: false,
-  },
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
 });
 
-// Connect to the IMAP email server
-imap.connect((err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("Connected to IMAP email server");
-  }
-});
+// // IMAP email server settings
+// const imap = new Imap({
+//   user: "myacreatives82@gmail.com",
+//   password: "vmdlsafsrsbrkmnp",
+//   host: "imap.gmail.com",
+//   port: 993,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   tlsOptions: {
+//     rejectUnauthorized: false,
+//   },
+// });
 
-// Fetch new emails
-imap.on("ready", () => {
-  imap.openBox("INBOX", true, (err, mailbox) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Opened INBOX");
-      imap.search([["UNSEEN"]], (err, results) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Found " + results.length + " new emails");
-          results.forEach((id) => {
-            imap.fetch(id, { headers: true, body: true }, (err, message) => {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log("Received email from " + message.from);
-                // Process the email message here
-                const email = {
-                  from: message.from,
-                  subject: message.subject,
-                  body: message.body,
-                };
-                // Send the email to the Vue app
-                app.post("/email", (req, res) => {
-                  res.json(email);
-                });
-              }
-            });
-          });
-        }
-      });
-    }
-  });
-});
+// // Connect to the IMAP email server
+// imap.connect((err) => {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log("Connected to IMAP email server");
+//   }
+// });
 
-imap.on("error", (err) => {
-  console.log("IMAP error:", err);
-});
+// // Fetch new emails
+// imap.on("ready", () => {
+//   imap.openBox("INBOX", true, (err, mailbox) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log("Opened INBOX");
+//       imap.search([["UNSEEN"]], (err, results) => {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           console.log("Found " + results.length + " new emails");
+//           results.forEach((id) => {
+//             imap.fetch(id, { headers: true, body: true }, (err, message) => {
+//               if (err) {
+//                 console.log(err);
+//               } else {
+//                 console.log("Received email from " + message.from);
+//                 // Process the email message here
+//                 const email = {
+//                   from: message.from,
+//                   subject: message.subject,
+//                   body: message.body,
+//                 };
+//                 // Send the email to the Vue app
+//                 app.post("/email", (req, res) => {
+//                   res.json(email);
+//                 });
+//               }
+//             });
+//           });
+//         }
+//       });
+//     }
+//   });
+// });
+
+// imap.on("error", (err) => {
+//   console.log("IMAP error:", err);
+// });
 
 app.post("/api/send-email", (req, res) => {
   const mail = req.body;
@@ -82,7 +93,7 @@ app.post("/api/send-email", (req, res) => {
   });
   const mailOptions = {
     from: "myacreatives82@gmail.com",
-    to: mail.to,
+    to: mail.to.join(","),
     subject: mail.subject,
     text: mail.body,
   };
