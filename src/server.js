@@ -11,7 +11,9 @@ const imap = new Imap({
   password: "vmdlsafsrsbrkmnp",
   host: "imap.gmail.com",
   port: 993,
-  tls: true,
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
 // Connect to the IMAP email server
