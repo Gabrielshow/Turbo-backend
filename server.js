@@ -87,12 +87,12 @@ app.post("/api/send-email", (req, res) => {
     port: 587,
     secure: false, // or 'STARTTLS'
     auth: {
-      user: "myacreatives82@gmail.com",
-      pass: "vmdlsafsrsbrkmnp",
+      user: "officeworkweblarenzo@gmail.com",
+      pass: "aycukdcpszinonxm",
     },
   });
   const mailOptions = {
-    from: "myacreatives82@gmail.com",
+    from: "officeworkweblarenzo@gmail.com",
     to: mail.to,
     subject: mail.subject,
     text: mail.body,
