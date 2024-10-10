@@ -5,6 +5,7 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 
 const app = express();
+app.use(express.json());
 app.use(cors());
 
 app.use((req, res, next) => {
@@ -81,28 +82,39 @@ app.use((req, res, next) => {
 // });
 
 app.post("/api/send-email", (req, res) => {
-  const mail = req.body;
   const transporter = nodemailer.createTransport({
-    host: "smtp.example.com",
+    host: "smtp.gmail.com",
     port: 587,
     secure: false, // or 'STARTTLS'
     auth: {
-      user: "officeworkweblarenzo@gmail.com",
-      pass: "aycukdcpszinonxm",
+      // user: "officeworkweblarenzo@gmail.com",
+      // pass: "aycukdcpszinonxm",
+      user: "myacreatives82@gmail.com",
+      pass: "vmdlsafsrsbrkmnp",
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
-  const mailOptions = {
-    from: "officeworkweblarenzo@gmail.com",
-    to: mail.to.join(","),
-    subject: mail.subject,
-    text: mail.body,
-  };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return console.log(error);
-    }
-    console.log("Email sent: " + info.response);
-    res.json({ message: "Email sent successfully" });
+  const toEmails = req.body.to;
+  toEmails.forEach((email) => {
+    // Send email to each recipient using the email address
+    transporter.sendMail(
+      {
+        // from: "officeworkweblarenzo@gmail.com",
+        from: "myacreatives82@gmail.com",
+        to: email,
+        subject: req.body.subject,
+        text: req.body.body,
+      },
+      (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(`Email sent to ${email}`);
+        }
+      }
+    );
   });
 });
 
