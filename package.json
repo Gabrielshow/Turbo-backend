@@ -1,21 +1,22 @@
 {
-  "name": "turbo",
+  "name": "server",
   "version": "1.0.0",
-  "description": "Turbo Email Server",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon server.js",
-    "dev": "nodemon server.js"
+    "start": "nodemon index.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "google-auth-library": "^9.14.1",
-    "imap": "^0.8.4",
-    "node-imap": "^0.9.6",
-    "nodemailer": "^6.4.10"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.9.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.20"
   }
 }
